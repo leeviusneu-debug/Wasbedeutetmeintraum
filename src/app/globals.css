@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+/* Design-Tokens: ruhiger Nachthimmel mit warmen, gedämpften Lichtakzenten */
+@theme {
+  --color-night-950: #07080f;
+  --color-night-900: #0b0d1a;
+  --color-night-800: #121528;
+  --color-night-700: #1b1f3a;
+  --color-dusk-500: #5b4f8a;
+  --color-dusk-400: #7c6fae;
+  --color-moon-50: #f7f2e8;
+  --color-moon-100: #ece4d4;
+  --color-moon-300: #c9bda6;
+  --color-moon-400: #a89c86;
+  --color-glow-300: #f1d49b;
+  --color-glow-400: #e6bd72;
+  --color-glow-500: #d4a24e;
+
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --animate-twinkle: twinkle var(--twinkle-duration, 6s) ease-in-out infinite;
+  --animate-drift: drift 40s ease-in-out infinite alternate;
+  --animate-fade-up: fade-up 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: var(--star-min, 0.15);
+    }
+    50% {
+      opacity: var(--star-max, 0.9);
+    }
+  }
+
+  @keyframes drift {
+    from {
+      transform: translate3d(-2%, -1%, 0) scale(1);
+    }
+    to {
+      transform: translate3d(2%, 1.5%, 0) scale(1.06);
+    }
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+html {
+  color-scheme: dark;
+  background-color: var(--color-night-950);
+}
+
+body {
+  background-color: var(--color-night-950);
+  color: var(--color-moon-100);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: color-mix(in oklab, var(--color-glow-400) 35%, transparent);
+  color: var(--color-moon-50);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
