@@ -1,4 +1,5 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { ArrowRightIcon } from "@/components/ui/icons";
 import { routes } from "@/lib/site";
 
 export function Hero() {
@@ -23,7 +24,7 @@ export function Hero() {
       <div className="mt-10 flex w-full animate-fade-up flex-col items-center gap-4 [animation-delay:360ms] sm:mt-12">
         <ButtonLink href={routes.dream} className="w-full max-w-xs sm:w-auto">
           Traum erzählen
-          <ArrowIcon />
+          <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
         </ButtonLink>
         <p className="text-sm text-moon-400">
           Kostenlos <Dot /> anonym <Dot /> in wenigen Minuten
@@ -38,24 +39,5 @@ function Dot() {
     <span aria-hidden="true" className="mx-1.5 text-glow-400/60">
       •
     </span>
-  );
-}
-
-function ArrowIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 20 20"
-      fill="none"
-      className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-    >
-      <path
-        d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }

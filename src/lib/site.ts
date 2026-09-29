@@ -8,6 +8,7 @@ export const siteConfig = {
 export const routes = {
   home: "/",
   dream: "/traum",
+  interpretation: "/traum/deutung",
   imprint: "/impressum",
   privacy: "/datenschutz",
 } as const;

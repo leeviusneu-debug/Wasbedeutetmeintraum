@@ -1,18 +1,17 @@
 import type { Metadata } from "next";
-import { SimplePage } from "@/components/layout/SimplePage";
+import { PageShell } from "@/components/layout/PageShell";
+import { DreamIntake } from "@/features/dream-intake";
 
 export const metadata: Metadata = {
   title: "Traum erzählen",
+  description:
+    "Erzähl deinen Traum in deinen eigenen Worten – danach führen dich ein paar ruhige Fragen tiefer hinein.",
 };
 
-// Platzhalter – hier entsteht als Nächstes die Traumabfrage (src/features/dream-intake).
 export default function DreamPage() {
   return (
-    <SimplePage title="Traum erzählen">
-      <p>
-        Hier kannst du uns bald deinen Traum erzählen. Wir arbeiten gerade daran
-        – schau gern bald wieder vorbei.
-      </p>
-    </SimplePage>
+    <PageShell>
+      <DreamIntake />
+    </PageShell>
   );
 }
