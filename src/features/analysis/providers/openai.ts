@@ -69,7 +69,10 @@ export function createOpenAIProvider(): AIProvider {
         .flatMap((item) => (item.type === "message" ? item.content : []))
         .find((part) => part.type === "refusal");
       if (refusal) {
-        throw new AnalysisError("refused", { cause: refusal.refusal });
+        // Begründung nicht protokollieren – sie kann Trauminhalte zitieren.
+        throw new AnalysisError("refused", {
+          cause: new Error("Anfrage vom Modell abgelehnt"),
+        });
       }
 
       if (response.status === "incomplete") {

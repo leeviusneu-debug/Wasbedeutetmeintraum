@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useId, type FormEvent, type KeyboardEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import { ArrowRightIcon, LockIcon } from "@/components/ui/icons";
+import { routes } from "@/lib/site";
 import { fieldClassName } from "./field-styles";
 
 const MIN_LENGTH = 10;
@@ -22,6 +24,7 @@ export function StoryStep({
 }: StoryStepProps) {
   const fieldId = useId();
   const hintId = useId();
+  const noticeId = useId();
   const canSubmit = value.trim().length >= MIN_LENGTH;
 
   function handleSubmit(event: FormEvent) {
@@ -59,7 +62,7 @@ export function StoryStep({
         onKeyDown={handleKeyDown}
         onFocus={onFocus}
         placeholder="Ich habe geträumt, dass …"
-        aria-describedby={hintId}
+        aria-describedby={`${hintId} ${noticeId}`}
         rows={8}
         className={`${fieldClassName} mt-8 min-h-56 font-serif text-lg sm:min-h-64 sm:text-xl`}
       />
@@ -74,6 +77,24 @@ export function StoryStep({
         </span>
         <span className="hidden sm:inline">Strg + Enter zum Fortfahren</span>
       </div>
+
+      <p
+        id={noticeId}
+        className="mt-4 rounded-2xl bg-moon-50/[0.03] px-4 py-3.5 text-xs leading-relaxed text-pretty text-moon-400 ring-1 ring-moon-50/10"
+      >
+        <span className="text-moon-300">Hinweis:</span> Deine Traumdeutung wird
+        automatisiert mithilfe künstlicher Intelligenz (KI) erstellt. Dafür
+        werden dein Traum und deine Antworten an unseren Dienstleister OpenAI
+        übermittelt. Bitte nenne keine vollständigen Namen oder andere Angaben,
+        durch die du oder andere Personen erkennbar werden. Mehr dazu in der{" "}
+        <Link
+          href={routes.privacy}
+          className="underline decoration-moon-400/40 underline-offset-2 hover:text-moon-100"
+        >
+          Datenschutzerklärung
+        </Link>
+        .
+      </p>
 
       <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-end">
         <Button

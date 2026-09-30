@@ -11,6 +11,21 @@ export const siteConfig = {
   explainerVideo: null as { src: string; poster?: string } | null,
 };
 
+/**
+ * Angaben zum Betreiber für Impressum und Datenschutzerklärung.
+ * Leere Felder erscheinen auf der Website als „[bitte ergänzen]“.
+ */
+export const legalConfig = {
+  operatorName: "",
+  /** Straße, PLZ und Ort – je Zeile ein Eintrag. */
+  address: [] as string[],
+  email: "",
+  /** Hosting-Anbieter inkl. Anschrift, z. B. „Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA“. */
+  hostingProvider: "",
+  /** Stand der Datenschutzerklärung. */
+  privacyUpdated: "September 2026",
+};
+
 export const routes = {
   home: "/",
   dream: "/traum",

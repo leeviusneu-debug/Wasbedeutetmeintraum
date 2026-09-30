@@ -18,10 +18,11 @@ cp .env.example .env.local
 
 Der Schlüssel wird nur serverseitig gelesen und nie an den Browser ausgeliefert.
 
-> **Sprachregel:** In allen sichtbaren Texten (Seiten, Buttons, Ladezustände,
-> Fehlermeldungen, Metadaten) werden keine technischen Begriffe wie „KI“,
-> „AI“ oder „Algorithmus“ verwendet. Die Verarbeitung über OpenAI ist ein
-> internes Implementierungsdetail.
+> **Sprachregel:** In den Texten der Seiten (Buttons, Ladezustände, Deutung,
+> Fehlermeldungen, Metadaten) werden keine technischen Begriffe wie „KI“ oder
+> „Algorithmus“ verwendet. **Ausnahme – Transparenzhinweise:** Der Hinweis
+> unter dem Traum-Textfeld (`StoryStep.tsx`) und die Datenschutzerklärung
+> nennen ausdrücklich, dass die Deutung mithilfe von KI (OpenAI) erstellt wird.
 
 ### Ablauf
 
