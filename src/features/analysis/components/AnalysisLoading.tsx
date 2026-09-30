@@ -3,26 +3,29 @@
 import { useEffect, useState } from "react";
 
 const MESSAGES = [
-  "Ich lese deinen Traum …",
-  "Ich achte auf Gefühle und Stimmungen …",
-  "Ich betrachte die Bilder, die dir begegnet sind …",
-  "Ich suche nach dem roten Faden …",
-  "Ich verbinde den Traum mit deinen Antworten …",
-  "Ich formuliere meine Gedanken für dich …",
+  "Wir schauen genauer hin …",
+  "Gefühle und Stimmungen werden betrachtet …",
+  "Die Bilder deines Traums kommen zusammen …",
+  "Der rote Faden wird sichtbar …",
+  "Deine Antworten fließen mit ein …",
+  "Deine persönliche Deutung entsteht …",
 ];
 
-const INTERVAL_MS = 4200;
+type AnalysisLoadingProps = {
+  /** Wechselintervall der Texte in Millisekunden. */
+  interval?: number;
+};
 
-export function AnalysisLoading() {
+export function AnalysisLoading({ interval = 4200 }: AnalysisLoadingProps) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const timer = window.setInterval(
       () => setIndex((i) => Math.min(i + 1, MESSAGES.length - 1)),
-      INTERVAL_MS,
+      interval,
     );
     return () => window.clearInterval(timer);
-  }, []);
+  }, [interval]);
 
   return (
     <div
@@ -32,7 +35,7 @@ export function AnalysisLoading() {
     >
       <Orb />
 
-      <h1 className="sr-only">Deine Traumdeutung wird erstellt</h1>
+      <h1 className="sr-only">Deine Traumdeutung entsteht</h1>
       <p
         key={index}
         className="mt-12 min-h-16 animate-step-in font-serif text-2xl font-light text-balance text-moon-50 sm:text-3xl"
@@ -40,7 +43,8 @@ export function AnalysisLoading() {
         {MESSAGES[index]}
       </p>
       <p className="mt-4 max-w-xs text-sm text-pretty text-moon-400">
-        Nimm dir einen Moment. Das dauert meist nicht länger als eine Minute.
+        Nimm dir einen Moment. Dein Traum wird aus verschiedenen Perspektiven
+        betrachtet.
       </p>
     </div>
   );

@@ -71,18 +71,21 @@ export const dreamInterpretationSchema = z.object({
     .string()
     .min(1)
     .describe(
-      "Der zentrale Aha-Gedanke: 1–2 Sätze, die Traum und Lebenssituation überraschend und konkret verbinden.",
+      "Der zentrale Gedanke: 1–2 Sätze, die Traum und Lebenssituation konkret und überraschend verbinden.",
     ),
-  symbolic: paragraphs("Die symbolische Ebene, 2–3 Absätze.", 3),
-  mystical: paragraphs(
-    "Eine vorsichtige spirituelle/mystische Perspektive, 1–2 Absätze.",
+  symbolic: paragraphs(
+    "Die symbolische Ebene mit mehreren möglichen Lesarten, 1–2 Absätze.",
     2,
   ),
-  reflectionQuestion: z
+  mystical: paragraphs(
+    "Eine vorsichtige traditionelle/spirituelle Perspektive, 1 Absatz.",
+    1,
+  ),
+  bridge: z
     .string()
     .min(1)
     .describe(
-      "Genau eine konkrete, offene Reflexionsfrage, die sich direkt aus Traum und Antworten ergibt.",
+      "2–3 Sätze: Eine sich abzeichnende Verbindung zur Lebenssituation benennen und behutsam zeigen, was man persönlich wissen müsste, um sie wirklich einzuordnen.",
     ),
   careNote: z
     .string()
@@ -93,36 +96,7 @@ export const dreamInterpretationSchema = z.object({
 
 export type DreamInterpretation = z.infer<typeof dreamInterpretationSchema>;
 
-/**
- * Der Teil der Deutung, der direkt auf der Website erscheint (~2/3).
- * Der Rest wird ausschließlich per E-Mail zugestellt.
- */
-export type InterpretationPreview = Pick<
-  DreamInterpretation,
-  "summary" | "observations" | "psychological" | "keyInsight" | "careNote"
->;
-
-/** Überschriften der Abschnitte, die nur in der E-Mail stehen. */
-export const EMAIL_ONLY_SECTIONS = [
-  "Die symbolische Ebene",
-  "Die mystische Perspektive",
-  "Deine persönliche Reflexionsfrage",
-] as const;
-
-/** Wählt die Vorschau-Felder explizit aus – nichts anderes verlässt den Server. */
-export function toPreview(
-  interpretation: DreamInterpretation,
-): InterpretationPreview {
-  return {
-    summary: interpretation.summary,
-    observations: interpretation.observations,
-    psychological: interpretation.psychological,
-    keyInsight: interpretation.keyInsight,
-    careNote: interpretation.careNote,
-  };
-}
-
-/** JSON-Schema für Structured Outputs der KI-Anbieter. */
+/** JSON-Schema für Structured Outputs des Sprachmodells. */
 export function interpretationJsonSchema(): Record<string, unknown> {
   const schema: Record<string, unknown> = {
     ...z.toJSONSchema(dreamInterpretationSchema, {

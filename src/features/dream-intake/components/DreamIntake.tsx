@@ -7,7 +7,7 @@ import {
   updateDreamSession,
   useDreamSession,
 } from "../session-store";
-import type { Answer, DreamSession } from "../types";
+import type { Answer, DreamSession, QuestionId } from "../types";
 import { CompleteStep } from "./CompleteStep";
 import { QuestionStep } from "./QuestionStep";
 import { StoryStep } from "./StoryStep";
@@ -22,16 +22,44 @@ function advance(session: DreamSession): DreamSession {
     : { ...session, step: next };
 }
 
+type SessionUpdater = (
+  updater: (session: DreamSession) => DreamSession,
+) => void;
+
+/** Traumabfrage mit lokal gespeicherter Sitzung (echter Ablauf unter /traum). */
 export function DreamIntake() {
   const session = useDreamSession();
+  if (!session) {
+    return <div aria-busy="true" className="min-h-[60vh]" />;
+  }
+  return <DreamIntakeFlow session={session} update={updateDreamSession} />;
+}
+
+export type DreamIntakeFlowProps = {
+  session: DreamSession;
+  update: SessionUpdater;
+  /** Statt des Links zu /traum/deutung (z. B. in der Demo). */
+  onInterpret?: () => void;
+  /** Wird beim Antippen des Traum-Textfelds aufgerufen (Demo). */
+  onStoryFocus?: () => void;
+  /** Wird beim Antippen eines Textfelds einer Frage aufgerufen (Demo). */
+  onAnswerFocus?: (id: QuestionId) => void;
+};
+
+/** Der eigentliche Ablauf – unabhängig davon, wo die Sitzung gespeichert ist. */
+export function DreamIntakeFlow({
+  session,
+  update,
+  onInterpret,
+  onStoryFocus,
+  onAnswerFocus,
+}: DreamIntakeFlowProps) {
   const [leaving, setLeaving] = useState(false);
   const busy = useRef(false);
   const shouldFocus = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const stepKey = session
-    ? `${session.phase}-${session.phase === "questions" ? session.step : 0}`
-    : "loading";
+  const stepKey = `${session.phase}-${session.phase === "questions" ? session.step : 0}`;
 
   // Nach jedem Schrittwechsel: Überschrift fokussieren (Screenreader) und
   // nach oben scrollen, falls der neue Schritt außerhalb des Sichtbereichs liegt.
@@ -58,16 +86,12 @@ export function DreamIntake() {
     window.setTimeout(() => {
       setLeaving(true);
       window.setTimeout(() => {
-        updateDreamSession(updater);
+        update(updater);
         shouldFocus.current = true;
         setLeaving(false);
         busy.current = false;
       }, LEAVE_DURATION);
     }, delay);
-  }
-
-  if (!session) {
-    return <div aria-busy="true" className="min-h-[60vh]" />;
   }
 
   const animation = leaving ? "animate-step-out" : "animate-step-in";
@@ -81,7 +105,8 @@ export function DreamIntake() {
         {session.phase === "story" && (
           <StoryStep
             value={session.dream}
-            onChange={(dream) => updateDreamSession((s) => ({ ...s, dream }))}
+            onChange={(dream) => update((s) => ({ ...s, dream }))}
+            onFocus={onStoryFocus}
             onSubmit={() =>
               transition((s) => {
                 const flow = buildQuestionFlow(s.dream);
@@ -97,7 +122,12 @@ export function DreamIntake() {
         )}
 
         {session.phase === "questions" && (
-          <QuestionsPhase session={session} transition={transition} />
+          <QuestionsPhase
+            session={session}
+            update={update}
+            transition={transition}
+            onAnswerFocus={onAnswerFocus}
+          />
         )}
 
         {session.phase === "complete" && (
@@ -110,6 +140,7 @@ export function DreamIntake() {
               }))
             }
             onRestart={() => transition(createEmptySession)}
+            onInterpret={onInterpret}
           />
         )}
       </div>
@@ -119,9 +150,13 @@ export function DreamIntake() {
 
 function QuestionsPhase({
   session,
+  update,
   transition,
+  onAnswerFocus,
 }: {
   session: DreamSession;
+  update: SessionUpdater;
+  onAnswerFocus?: (id: QuestionId) => void;
   transition: (
     updater: (session: DreamSession) => DreamSession,
     delay?: number,
@@ -137,8 +172,9 @@ function QuestionsPhase({
       answer={answer}
       current={session.step + 1}
       total={session.flow.length}
+      onTextFocus={onAnswerFocus && (() => onAnswerFocus(id))}
       onChange={(next) =>
-        updateDreamSession((s) => ({
+        update((s) => ({
           ...s,
           answers: { ...s.answers, [id]: { ...next, skipped: false } },
         }))

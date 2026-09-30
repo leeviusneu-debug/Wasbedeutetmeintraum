@@ -22,6 +22,8 @@ type QuestionStepProps = {
   onNext: (options?: { delay?: number }) => void;
   onBack: () => void;
   onSkip: () => void;
+  /** Beim Antippen des Textfelds bzw. Notizfelds (Demo). */
+  onTextFocus?: () => void;
 };
 
 export function QuestionStep({
@@ -33,6 +35,7 @@ export function QuestionStep({
   onNext,
   onBack,
   onSkip,
+  onTextFocus,
 }: QuestionStepProps) {
   const titleId = useId();
   const hintId = useId();
@@ -116,6 +119,7 @@ export function QuestionStep({
               onChange({ ...answer, text: event.target.value, skipped: false })
             }
             onKeyDown={handleTextKeyDown}
+            onFocus={onTextFocus}
             placeholder={question.placeholder}
             rows={4}
             className={`${fieldClassName} min-h-36 text-base sm:text-lg`}
@@ -169,6 +173,7 @@ export function QuestionStep({
             value={answer.text}
             onChange={(text) => onChange({ ...answer, text })}
             onKeyDown={handleTextKeyDown}
+            onFocus={onTextFocus}
           />
         )}
       </div>
@@ -237,11 +242,13 @@ function NoteField({
   value,
   onChange,
   onKeyDown,
+  onFocus,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   onKeyDown: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
+  onFocus?: () => void;
 }) {
   const id = useId();
   return (
@@ -254,6 +261,7 @@ function NoteField({
         value={value}
         onChange={(event) => onChange(event.target.value)}
         onKeyDown={onKeyDown}
+        onFocus={onFocus}
         rows={2}
         className={`${fieldClassName} mt-2 min-h-20 text-base`}
       />

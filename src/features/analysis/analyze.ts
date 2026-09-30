@@ -56,7 +56,7 @@ function normalize(interpretation: DreamInterpretation): DreamInterpretation {
     keyInsight: interpretation.keyInsight.trim(),
     symbolic: trimAll(interpretation.symbolic),
     mystical: trimAll(interpretation.mystical),
-    reflectionQuestion: interpretation.reflectionQuestion.trim(),
+    bridge: interpretation.bridge.trim(),
     careNote: interpretation.careNote.trim(),
   };
 }

@@ -11,9 +11,15 @@ type StoryStepProps = {
   value: string;
   onChange: (value: string) => void;
   onSubmit: () => void;
+  onFocus?: () => void;
 };
 
-export function StoryStep({ value, onChange, onSubmit }: StoryStepProps) {
+export function StoryStep({
+  value,
+  onChange,
+  onSubmit,
+  onFocus,
+}: StoryStepProps) {
   const fieldId = useId();
   const hintId = useId();
   const canSubmit = value.trim().length >= MIN_LENGTH;
@@ -51,6 +57,7 @@ export function StoryStep({ value, onChange, onSubmit }: StoryStepProps) {
         value={value}
         onChange={(event) => onChange(event.target.value)}
         onKeyDown={handleKeyDown}
+        onFocus={onFocus}
         placeholder="Ich habe geträumt, dass …"
         aria-describedby={hintId}
         rows={8}
@@ -63,7 +70,7 @@ export function StoryStep({ value, onChange, onSubmit }: StoryStepProps) {
       >
         <span className="flex items-center gap-1.5">
           <LockIcon />
-          Wird vorerst nur auf deinem Gerät gespeichert.
+          Anonym – ohne Anmeldung, ohne Konto.
         </span>
         <span className="hidden sm:inline">Strg + Enter zum Fortfahren</span>
       </div>

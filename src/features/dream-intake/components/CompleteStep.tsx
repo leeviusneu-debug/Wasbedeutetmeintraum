@@ -6,9 +6,22 @@ import { routes } from "@/lib/site";
 type CompleteStepProps = {
   onEdit: () => void;
   onRestart: () => void;
+  /** Statt des Links zu /traum/deutung (z. B. in der Demo). */
+  onInterpret?: () => void;
 };
 
-export function CompleteStep({ onEdit, onRestart }: CompleteStepProps) {
+export function CompleteStep({
+  onEdit,
+  onRestart,
+  onInterpret,
+}: CompleteStepProps) {
+  const interpretLabel = (
+    <>
+      Meinen Traum deuten
+      <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+    </>
+  );
+
   return (
     <div className="flex flex-col items-center text-center">
       <div
@@ -32,13 +45,21 @@ export function CompleteStep({ onEdit, onRestart }: CompleteStepProps) {
         spiritueller Sicht.
       </p>
 
-      <ButtonLink
-        href={routes.interpretation}
-        className="mt-10 w-full max-w-xs sm:w-auto"
-      >
-        Meinen Traum deuten
-        <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-      </ButtonLink>
+      {onInterpret ? (
+        <Button
+          onClick={onInterpret}
+          className="mt-10 w-full max-w-xs sm:w-auto"
+        >
+          {interpretLabel}
+        </Button>
+      ) : (
+        <ButtonLink
+          href={routes.interpretation}
+          className="mt-10 w-full max-w-xs sm:w-auto"
+        >
+          {interpretLabel}
+        </ButtonLink>
+      )}
 
       <div className="mt-6 flex flex-col items-center sm:flex-row sm:gap-2">
         <Button variant="quiet" onClick={onEdit}>

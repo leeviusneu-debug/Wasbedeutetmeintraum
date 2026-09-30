@@ -8,10 +8,8 @@ import {
   type AnalysisApiResponse,
   type AnalysisErrorCode,
   type ApiError,
-  type DeliveryApiRequest,
-  type DeliveryApiResponse,
 } from "./contract";
-import type { AnalysisRequest, InterpretationPreview } from "./schema";
+import type { AnalysisRequest, DreamInterpretation } from "./schema";
 
 export class ClientAnalysisError extends Error {
   constructor(
@@ -41,23 +39,16 @@ export function fingerprint(request: AnalysisRequest): string {
   return `${hash.toString(36)}-${text.length}`;
 }
 
-export type PreviewResult = {
-  preview: InterpretationPreview;
-  analysisRef: string;
-  emailOnlySections: string[];
-};
-
-async function postJson<T extends object>(
-  url: string,
-  body: unknown,
+export async function requestInterpretation(
+  request: AnalysisRequest,
   signal?: AbortSignal,
-): Promise<Exclude<T, ApiError>> {
+): Promise<DreamInterpretation> {
   let response: Response;
   try {
-    response = await fetch(url, {
+    response = await fetch("/api/deutung", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+      body: JSON.stringify(request),
       signal,
     });
   } catch (error) {
@@ -68,7 +59,9 @@ async function postJson<T extends object>(
     );
   }
 
-  const data = (await response.json().catch(() => null)) as T | null;
+  const data = (await response
+    .json()
+    .catch(() => null)) as AnalysisApiResponse | null;
   if (data && "error" in data) {
     const { code, message } = (data as ApiError).error;
     throw new ClientAnalysisError(
@@ -81,69 +74,48 @@ async function postJson<T extends object>(
       response.status === 504 ? "timeout" : "unknown",
     );
   }
-  return data as Exclude<T, ApiError>;
-}
-
-export function requestInterpretation(
-  request: AnalysisRequest,
-  signal?: AbortSignal,
-): Promise<PreviewResult> {
-  return postJson<AnalysisApiResponse>("/api/deutung", request, signal);
-}
-
-/** Die E-Mail-Adresse wird nur an den Server übergeben, nie gespeichert. */
-export async function requestDelivery(request: DeliveryApiRequest) {
-  await postJson<DeliveryApiResponse>("/api/deutung/zusenden", request);
+  return data.interpretation;
 }
 
 /* ------------------------------------------------------------------ */
-/* Lokaler Cache der letzten Vorschau (nie die vollständige Deutung)   */
+/* Lokaler Cache der letzten Deutung                                   */
 /* ------------------------------------------------------------------ */
 
-type CachedPreview = {
-  version: 2;
+type CachedInterpretation = {
+  version: 3;
   fingerprint: string;
-  result: PreviewResult;
+  interpretation: DreamInterpretation;
   createdAt: string;
-  /** Zeitpunkt des Versands – ohne E-Mail-Adresse. */
-  deliveredAt?: string;
 } | null;
 
-const cache = createLocalStore<CachedPreview>({
-  key: "wbmt:interpretation:v2",
+const LEGACY_KEYS = ["wbmt:interpretation:v1", "wbmt:interpretation:v2"];
+
+const cache = createLocalStore<CachedInterpretation>({
+  key: "wbmt:interpretation:v3",
   initial: () => null,
   parse: (value) =>
-    (value as CachedPreview)?.version === 2 ? (value as CachedPreview) : null,
+    (value as CachedInterpretation)?.version === 3
+      ? (value as CachedInterpretation)
+      : null,
 });
 
-export function savePreview(fingerprintValue: string, result: PreviewResult) {
+export function saveInterpretation(
+  fingerprintValue: string,
+  interpretation: DreamInterpretation,
+) {
   try {
-    // Frühere Version speicherte die vollständige Deutung lokal – entfernen.
-    window.localStorage.removeItem("wbmt:interpretation:v1");
+    LEGACY_KEYS.forEach((key) => window.localStorage.removeItem(key));
   } catch {}
   cache.set(() => ({
-    version: 2,
+    version: 3,
     fingerprint: fingerprintValue,
-    result,
+    interpretation,
     createdAt: new Date().toISOString(),
   }));
 }
 
-export function markDelivered(fingerprintValue: string) {
-  cache.set((current) =>
-    current?.fingerprint === fingerprintValue
-      ? { ...current, deliveredAt: new Date().toISOString() }
-      : current,
-  );
-}
-
-/** Nach Ablauf der Referenz: Vorschau verwerfen, damit neu gedeutet wird. */
-export function clearPreview() {
-  cache.set(() => null);
-}
-
 /**
- * Zuletzt gespeicherte Vorschau (oder `null`). Ob der Browser-Speicher schon
+ * Zuletzt gespeicherte Deutung (oder `null`). Ob der Browser-Speicher schon
  * geladen ist, zeigt `useDreamSession()` – beide Stores laden gleichzeitig.
  */
-export const useCachedPreview = cache.useValue;
+export const useCachedInterpretation = cache.useValue;

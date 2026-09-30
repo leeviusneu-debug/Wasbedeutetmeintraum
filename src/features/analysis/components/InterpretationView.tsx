@@ -10,16 +10,13 @@ import {
   useDreamSession,
 } from "@/features/dream-intake/session-store";
 import { routes } from "@/lib/site";
-import { EmailCapture } from "@/features/delivery/components/EmailCapture";
 import {
-  clearPreview,
   ClientAnalysisError,
   fingerprint,
-  markDelivered,
   requestInterpretation,
-  savePreview,
+  saveInterpretation,
   toAnalysisRequest,
-  useCachedPreview,
+  useCachedInterpretation,
 } from "../client";
 import { AnalysisLoading } from "./AnalysisLoading";
 import { InterpretationResult } from "./InterpretationResult";
@@ -29,7 +26,7 @@ type FailedRequest = { fingerprint: string; error: ClientAnalysisError };
 export function InterpretationView() {
   const router = useRouter();
   const session = useDreamSession();
-  const cached = useCachedPreview();
+  const cached = useCachedInterpretation();
   const [failed, setFailed] = useState<FailedRequest | null>(null);
 
   const request = useMemo(
@@ -40,16 +37,16 @@ export function InterpretationView() {
     [session],
   );
   const key = request ? fingerprint(request) : null;
-  const current = key && cached?.fingerprint === key ? cached : null;
-  const result = current?.result ?? null;
+  const interpretation =
+    key && cached?.fingerprint === key ? cached.interpretation : null;
   const error = key && failed?.fingerprint === key ? failed.error : null;
 
   // Deutung anfordern, sofern für genau diese Antworten noch keine vorliegt.
   useEffect(() => {
-    if (!request || !key || result || error) return;
+    if (!request || !key || interpretation || error) return;
     const controller = new AbortController();
     requestInterpretation(request, controller.signal)
-      .then((preview) => savePreview(key, preview))
+      .then((result) => saveInterpretation(key, result))
       .catch((reason: unknown) => {
         if (controller.signal.aborted) return;
         setFailed({
@@ -61,7 +58,7 @@ export function InterpretationView() {
         });
       });
     return () => controller.abort();
-  }, [request, key, result, error]);
+  }, [request, key, interpretation, error]);
 
   function startNewDream() {
     resetDreamSession();
@@ -74,22 +71,9 @@ export function InterpretationView() {
         <div aria-busy="true" className="min-h-[60vh]" />
       ) : !request ? (
         <NotReady inProgress={session.phase !== "story" || !!session.dream} />
-      ) : result && key ? (
+      ) : interpretation ? (
         <InterpretationResult
-          preview={result.preview}
-          continuation={
-            <EmailCapture
-              analysisRef={result.analysisRef}
-              emailOnlySections={result.emailOnlySections}
-              alreadyDelivered={Boolean(current?.deliveredAt)}
-              onDelivered={() => {
-                markDelivered(key);
-                router.push(routes.delivered);
-              }}
-              // Referenz abgelaufen → Vorschau verwerfen, es wird neu gedeutet.
-              onExpired={clearPreview}
-            />
-          }
+          interpretation={interpretation}
           actions={
             <div className="flex flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-3">
               <Button variant="ghost" onClick={startNewDream}>
@@ -166,8 +150,8 @@ function NotReady({ inProgress }: { inProgress: boolean }) {
       </h1>
       <p className="mt-5 max-w-md leading-relaxed text-pretty text-moon-300">
         {inProgress
-          ? "Beantworte noch die letzten Fragen – dann kann ich deinen Traum deuten."
-          : "Erzähl mir zuerst deinen Traum. Danach schauen wir gemeinsam genauer hin."}
+          ? "Beantworte noch die letzten Fragen – dann entsteht deine persönliche Deutung."
+          : "Erzähl zuerst deinen Traum. Danach schauen wir gemeinsam genauer hin."}
       </p>
       <ButtonLink href={routes.dream} className="mt-10">
         {inProgress ? "Abfrage fortsetzen" : "Traum erzählen"}

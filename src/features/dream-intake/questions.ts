@@ -82,7 +82,7 @@ export function resolveQuestion(
       return {
         id,
         kind: "single",
-        lead: "Danke, dass du deinen Traum mit mir teilst.",
+        lead: "Danke, dass du deinen Traum teilst.",
         title: "Welches Gefühl war in deinem Traum am stärksten?",
         hint: "Wähle, was am ehesten passt – es muss nicht genau stimmen.",
         options: EMOTIONS,

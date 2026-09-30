@@ -4,7 +4,7 @@ import { routes } from "@/lib/site";
 
 export function Hero() {
   return (
-    <section className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center px-5 py-20 text-center sm:px-8 sm:py-28">
+    <section className="mx-auto flex min-h-[78dvh] w-full max-w-3xl flex-col items-center justify-center px-5 py-20 text-center sm:px-8 sm:py-28">
       <p className="animate-fade-up text-[0.7rem] font-medium tracking-[0.3em] text-glow-300/80 uppercase sm:text-xs">
         Traumdeutung mit Tiefgang
       </p>
