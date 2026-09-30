@@ -36,6 +36,25 @@ const DEFAULTS: Record<AnalysisErrorCode, { status: number; message: string }> =
       message:
         "Zu diesem Traum konnte leider keine Deutung erstellt werden. Magst du ihn etwas anders beschreiben?",
     },
+    invalid_email: {
+      status: 400,
+      message: "Bitte gib eine gültige E-Mail-Adresse ein.",
+    },
+    expired: {
+      status: 410,
+      message:
+        "Diese Deutung ist abgelaufen. Lade die Seite neu, dann erstelle ich sie noch einmal für dich.",
+    },
+    delivery_failed: {
+      status: 502,
+      message:
+        "Die E-Mail konnte gerade nicht verschickt werden. Bitte versuche es gleich noch einmal.",
+    },
+    email_limit: {
+      status: 429,
+      message:
+        "An diese Adresse haben wir heute schon mehrere Deutungen geschickt. Bitte versuche es morgen wieder.",
+    },
     unknown: {
       status: 500,
       message: "Etwas ist schiefgelaufen. Bitte versuche es noch einmal.",

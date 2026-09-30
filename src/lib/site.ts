@@ -9,6 +9,8 @@ export const routes = {
   home: "/",
   dream: "/traum",
   interpretation: "/traum/deutung",
+  delivered: "/traum/deutung/unterwegs",
+  conversation: "/gespraech",
   imprint: "/impressum",
   privacy: "/datenschutz",
 } as const;

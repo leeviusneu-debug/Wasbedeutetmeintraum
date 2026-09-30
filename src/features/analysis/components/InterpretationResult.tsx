@@ -1,8 +1,10 @@
 import type { CSSProperties, ReactNode } from "react";
-import type { DreamInterpretation } from "../schema";
+import type { InterpretationPreview } from "../schema";
 
 type InterpretationResultProps = {
-  interpretation: DreamInterpretation;
+  preview: InterpretationPreview;
+  /** Wird nach dem sichtbaren Teil eingeblendet (z. B. E-Mail-Angebot). */
+  continuation: ReactNode;
   actions: ReactNode;
 };
 
@@ -15,18 +17,12 @@ function reveal(order: number, className = "") {
 }
 
 export function InterpretationResult({
-  interpretation,
+  preview,
+  continuation,
   actions,
 }: InterpretationResultProps) {
-  const {
-    summary,
-    observations,
-    psychological,
-    symbolic,
-    mystical,
-    reflectionQuestion,
-    careNote,
-  } = interpretation;
+  const { summary, observations, psychological, keyInsight, careNote } =
+    preview;
 
   return (
     <article className="flex flex-col">
@@ -74,38 +70,33 @@ export function InterpretationResult({
       </Section>
 
       <Section title="Eine mögliche psychologische Perspektive" order={2}>
-        <Paragraphs items={psychological} />
-      </Section>
-
-      <Section title="Die symbolische Ebene" order={3}>
-        <Paragraphs items={symbolic} />
-      </Section>
-
-      <Section
-        title="Wenn du auch die mystische Seite betrachten möchtest"
-        order={4}
-      >
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-dusk-500/15 via-night-900/60 to-night-900/40 p-6 ring-1 ring-dusk-400/20 sm:p-8">
-          <span
-            aria-hidden="true"
-            className="absolute -top-16 -right-16 h-40 w-40 rounded-full bg-dusk-400/20 blur-3xl"
-          />
-          <div className="relative">
-            <Paragraphs items={mystical} />
-          </div>
+        <div className="space-y-4 text-[1.05rem] leading-relaxed text-pretty text-moon-100 sm:text-lg">
+          {psychological.map((text, i) => (
+            <p key={i}>{text}</p>
+          ))}
         </div>
       </Section>
 
-      <section {...reveal(5, "mt-16 text-center")}>
-        <h2 className="font-serif text-xl text-moon-300 italic">
-          Die interessanteste Frage ist vielleicht …
-        </h2>
-        <p className="mx-auto mt-5 max-w-xl font-serif text-2xl leading-snug font-light text-balance text-glow-300 sm:text-3xl">
-          {reflectionQuestion}
-        </p>
-      </section>
+      <figure {...reveal(3, "mt-14 text-center")}>
+        <span
+          aria-hidden="true"
+          className="mx-auto block h-px w-16 bg-gradient-to-r from-transparent via-glow-300/60 to-transparent"
+        />
+        <figcaption className="mt-8 text-[0.7rem] font-medium tracking-[0.3em] text-glow-300/80 uppercase">
+          Ein Gedanke, der bleibt
+        </figcaption>
+        <blockquote className="mx-auto mt-4 max-w-xl font-serif text-2xl leading-snug font-light text-balance text-glow-300 sm:text-[1.7rem]">
+          {keyInsight}
+        </blockquote>
+        <span
+          aria-hidden="true"
+          className="mx-auto mt-8 block h-px w-16 bg-gradient-to-r from-transparent via-glow-300/60 to-transparent"
+        />
+      </figure>
 
-      <div {...reveal(6, "mt-16")}>
+      <div {...reveal(4, "mt-16")}>{continuation}</div>
+
+      <div {...reveal(5, "mt-14")}>
         {actions}
         <p className="mx-auto mt-10 max-w-md text-center text-xs leading-relaxed text-pretty text-moon-400">
           Diese Deutung ist eine Einladung zur Selbstreflexion – keine
@@ -133,15 +124,5 @@ function Section({
       </h2>
       {children}
     </section>
-  );
-}
-
-function Paragraphs({ items }: { items: string[] }) {
-  return (
-    <div className="space-y-4 text-[1.05rem] leading-relaxed text-pretty text-moon-100 sm:text-lg">
-      {items.map((text, i) => (
-        <p key={i}>{text}</p>
-      ))}
-    </div>
   );
 }

@@ -44,6 +44,8 @@ const MOCK_INTERPRETATION: DreamInterpretation = {
     "Vielleicht spiegelt der Traum eine Phase, in der du nach Halt suchst, während sich um dich herum etwas verändert. Die Stimme, die dich ruft, könnte für ein Bedürfnis nach Verbundenheit stehen, das gerade nicht ganz erfüllt wird.",
     "Dass du im Traum Angst hattest und nach dem Aufwachen eher nachdenklich warst, kann ein Hinweis sein, dass dich das Thema nicht nur erschreckt, sondern auch beschäftigt – als würdest du innerlich schon nach einer Antwort suchen.",
   ],
+  keyInsight:
+    "Vielleicht ist es kein Zufall, dass du im Traum nach deiner Mutter suchst, während sie im Wachleben krank ist: Der Traum zeigt nicht nur die Sorge um sie, sondern auch die Frage, wo du selbst gerade Halt findest.",
   symbolic: [
     "Der Wald gilt in vielen Erzählungen als Ort des Übergangs: Man verliert den Weg, um einen neuen zu finden. In deinem Traum wirkt er zugleich fremd und vertraut – vielleicht ein Hinweis darauf, dass das Neue schon Teile von dir enthält.",
     "Die Schlange kann ganz unterschiedlich gelesen werden: als etwas Bedrohliches, dem du ausweichen möchtest, oder – wie in vielen Traditionen – als Zeichen von Wandlung und Häutung. Entscheidend ist, wie sie auf dich gewirkt hat.",

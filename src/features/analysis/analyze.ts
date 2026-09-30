@@ -53,6 +53,7 @@ function normalize(interpretation: DreamInterpretation): DreamInterpretation {
       text: o.text.trim(),
     })),
     psychological: trimAll(interpretation.psychological),
+    keyInsight: interpretation.keyInsight.trim(),
     symbolic: trimAll(interpretation.symbolic),
     mystical: trimAll(interpretation.mystical),
     reflectionQuestion: interpretation.reflectionQuestion.trim(),
