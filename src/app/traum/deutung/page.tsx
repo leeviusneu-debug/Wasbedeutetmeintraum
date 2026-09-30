@@ -1,19 +1,16 @@
 import type { Metadata } from "next";
-import { SimplePage } from "@/components/layout/SimplePage";
+import { PageShell } from "@/components/layout/PageShell";
+import { InterpretationView } from "@/features/analysis";
 
 export const metadata: Metadata = {
   title: "Deine Traumdeutung",
+  robots: { index: false },
 };
 
-// Platzhalter – hier entsteht als Nächstes die KI-Deutung (src/features/analysis).
 export default function InterpretationPage() {
   return (
-    <SimplePage title="Deine Deutung entsteht bald">
-      <p>
-        Danke für deine Geduld. Die Deutung deines Traums ist der nächste
-        Schritt, an dem wir gerade arbeiten. Deine Antworten bleiben bis dahin
-        auf diesem Gerät gespeichert.
-      </p>
-    </SimplePage>
+    <PageShell>
+      <InterpretationView />
+    </PageShell>
   );
 }
