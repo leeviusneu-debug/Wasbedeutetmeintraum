@@ -32,6 +32,10 @@ export default function PrivacyPage() {
         <ul>
           <li>Du brauchst kein Konto und musst dich nicht anmelden.</li>
           <li>
+            Deine Deutung wird nur erstellt, wenn du vorher ausdrücklich in die
+            Verarbeitung eingewilligt hast.
+          </li>
+          <li>
             Wir setzen keine Cookies, kein Tracking und keine Analyse-Tools ein.
           </li>
           <li>
@@ -145,12 +149,21 @@ export default function PrivacyPage() {
           Die Verarbeitung erfolgt, um dir die von dir angeforderte Traumdeutung
           bereitzustellen (Art. 6 Abs. 1 lit. b DSGVO). Träume können sehr
           persönliche Inhalte berühren, etwa Angaben zu Gesundheit, Sexualität
-          oder religiösen Überzeugungen. Soweit du solche Angaben freiwillig
-          machst, verarbeiten wir sie auf Grundlage deiner ausdrücklichen
-          Einwilligung (Art. 9 Abs. 2 lit. a DSGVO), die du durch das Absenden
-          erteilst. Du kannst sie jederzeit mit Wirkung für die Zukunft
-          widerrufen, indem du die Deutung nicht (weiter) nutzt und deine lokal
-          gespeicherten Daten löschst (siehe Abschnitt 5).
+          oder religiösen Überzeugungen. Solche Angaben verarbeiten wir nur auf
+          Grundlage deiner ausdrücklichen Einwilligung (Art. 9 Abs. 2 lit. a
+          DSGVO). Diese erteilst du, indem du vor dem Erstellen der Deutung die
+          entsprechende Checkbox aktivierst; ohne diese Einwilligung wird keine
+          Deutung erstellt und nichts an OpenAI übermittelt. Der Nachweis
+          (Version des Einwilligungstextes und Zeitpunkt) wird zusammen mit
+          deinen Eingaben lokal in deinem Browser gespeichert.
+        </p>
+        <p>
+          Du kannst deine Einwilligung jederzeit mit Wirkung für die Zukunft
+          widerrufen – etwa indem du den Haken wieder entfernst, mit „Neuen
+          Traum erzählen“ neu beginnst oder deine lokal gespeicherten Daten
+          löschst (siehe Abschnitt 5). Die Rechtmäßigkeit der bis zum Widerruf
+          erfolgten Verarbeitung bleibt davon unberührt; bereits an OpenAI
+          übermittelte Anfragen werden dort spätestens nach 30 Tagen gelöscht.
         </p>
 
         <h3>Was die Deutung ist – und was nicht</h3>

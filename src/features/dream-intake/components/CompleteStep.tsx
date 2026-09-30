@@ -1,11 +1,18 @@
+"use client";
+
+import Link from "next/link";
+import { useId } from "react";
 import { Button } from "@/components/ui/Button";
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { ArrowRightIcon } from "@/components/ui/icons";
+import { ArrowRightIcon, CheckIcon } from "@/components/ui/icons";
 import { routes } from "@/lib/site";
+import { PROCESSING_CONSENT } from "../consent";
 
 type CompleteStepProps = {
   onEdit: () => void;
   onRestart: () => void;
+  consentGiven: boolean;
+  onConsentChange: (checked: boolean) => void;
   /** Statt des Links zu /traum/deutung (z. B. in der Demo). */
   onInterpret?: () => void;
 };
@@ -13,8 +20,12 @@ type CompleteStepProps = {
 export function CompleteStep({
   onEdit,
   onRestart,
+  consentGiven,
+  onConsentChange,
   onInterpret,
 }: CompleteStepProps) {
+  const consentId = useId();
+  const hintId = useId();
   const interpretLabel = (
     <>
       Meinen Traum deuten
@@ -45,20 +56,56 @@ export function CompleteStep({
         spiritueller Sicht.
       </p>
 
-      {onInterpret ? (
+      <div className="mt-10 flex w-full max-w-xl items-start gap-3 rounded-2xl bg-moon-50/[0.03] p-4 text-left ring-1 ring-moon-50/10 sm:p-5">
+        <span className="relative mt-0.5 flex h-5 w-5 shrink-0">
+          <input
+            id={consentId}
+            type="checkbox"
+            checked={consentGiven}
+            onChange={(event) => onConsentChange(event.target.checked)}
+            aria-describedby={consentGiven ? undefined : hintId}
+            className="peer h-5 w-5 cursor-pointer appearance-none rounded-md bg-night-950/60 ring-1 ring-moon-50/25 transition-colors checked:bg-glow-300/90 checked:ring-glow-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-glow-300"
+          />
+          <CheckIcon className="pointer-events-none absolute inset-0 m-auto h-3.5 w-3.5 text-night-950 opacity-0 peer-checked:opacity-100" />
+        </span>
+        <label
+          htmlFor={consentId}
+          className="cursor-pointer text-xs leading-relaxed text-pretty text-moon-300 sm:text-sm"
+        >
+          {PROCESSING_CONSENT.text} Mehr dazu in der{" "}
+          <Link
+            href={routes.privacy}
+            className="underline decoration-moon-400/40 underline-offset-2 hover:text-moon-100"
+          >
+            Datenschutzerklärung
+          </Link>
+          .
+        </label>
+      </div>
+
+      {!consentGiven ? (
+        <Button disabled className="mt-8 w-full max-w-xs sm:w-auto">
+          {interpretLabel}
+        </Button>
+      ) : onInterpret ? (
         <Button
           onClick={onInterpret}
-          className="mt-10 w-full max-w-xs sm:w-auto"
+          className="mt-8 w-full max-w-xs sm:w-auto"
         >
           {interpretLabel}
         </Button>
       ) : (
         <ButtonLink
           href={routes.interpretation}
-          className="mt-10 w-full max-w-xs sm:w-auto"
+          className="mt-8 w-full max-w-xs sm:w-auto"
         >
           {interpretLabel}
         </ButtonLink>
+      )}
+      {!consentGiven && (
+        <p id={hintId} className="mt-3 text-xs text-moon-400">
+          Bitte bestätige zuerst die Einwilligung.
+        </p>
       )}
 
       <div className="mt-6 flex flex-col items-center sm:flex-row sm:gap-2">

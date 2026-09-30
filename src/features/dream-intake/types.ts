@@ -1,3 +1,5 @@
+import type { ProcessingConsent } from "./consent";
+
 export type QuestionId =
   | "emotion"
   | "people"
@@ -47,5 +49,7 @@ export type DreamSession = {
   flow: QuestionId[];
   step: number;
   answers: Partial<Record<QuestionId, Answer>>;
+  /** Einwilligung in die Verarbeitung (siehe consent.ts). */
+  consent?: ProcessingConsent;
   updatedAt: string;
 };

@@ -19,6 +19,7 @@ export const DEMO_DREAM =
  * 5. Ende: „Ich bin abrupt aufgewacht“
  * 6. Aufwachen: „Nachdenklich“
  * 7. Leben: „Eine Veränderung“ + „Arbeit oder Ausbildung“, Notizfeld antippen, „Weiter“
+ * 8. Einwilligung anhaken, dann „Meinen Traum deuten“
  */
 export const DEMO_TEXT_ANSWERS: Partial<Record<QuestionId, string>> = {
   people:

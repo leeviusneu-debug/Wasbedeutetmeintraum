@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { hasValidConsent, PROCESSING_CONSENT } from "../consent";
 import { buildQuestionFlow, resolveQuestion } from "../questions";
 import {
   createEmptySession,
@@ -140,6 +141,18 @@ export function DreamIntakeFlow({
               }))
             }
             onRestart={() => transition(createEmptySession)}
+            consentGiven={hasValidConsent(session.consent)}
+            onConsentChange={(checked) =>
+              update((s) => ({
+                ...s,
+                consent: checked
+                  ? {
+                      version: PROCESSING_CONSENT.version,
+                      givenAt: new Date().toISOString(),
+                    }
+                  : undefined,
+              }))
+            }
             onInterpret={onInterpret}
           />
         )}

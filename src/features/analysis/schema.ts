@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { PROCESSING_CONSENT } from "@/features/dream-intake/consent";
 
 /* ------------------------------------------------------------------ */
 /* Anfrage: Rohdaten aus der Traumabfrage (vom Client gesendet)        */
@@ -29,6 +30,11 @@ export const analysisRequestSchema = z.object({
     .max(8000, "Die Traumbeschreibung ist zu lang."),
   flow: z.array(questionIdSchema).max(8),
   answers: z.partialRecord(questionIdSchema, answerSchema),
+  /** Ohne ausdrückliche Einwilligung wird keine Deutung erstellt. */
+  consent: z.object({
+    version: z.literal(PROCESSING_CONSENT.version),
+    givenAt: z.string().max(40),
+  }),
 });
 
 export type AnalysisRequest = z.infer<typeof analysisRequestSchema>;

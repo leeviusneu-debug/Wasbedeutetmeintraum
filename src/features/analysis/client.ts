@@ -1,6 +1,7 @@
 "use client";
 
 import { createLocalStore } from "@/lib/local-store";
+import { PROCESSING_CONSENT } from "@/features/dream-intake/consent";
 import type { DreamSession } from "@/features/dream-intake/types";
 import { defaultErrorMessage } from "./errors";
 import {
@@ -21,11 +22,17 @@ export class ClientAnalysisError extends Error {
 }
 
 /** Nur die Daten, die für die Deutung gebraucht werden. */
-export function toAnalysisRequest(session: DreamSession): AnalysisRequest {
+export function toAnalysisRequest(
+  session: DreamSession & { consent: NonNullable<DreamSession["consent"]> },
+): AnalysisRequest {
   return {
     dream: session.dream,
     flow: session.flow,
     answers: session.answers,
+    consent: {
+      version: PROCESSING_CONSENT.version,
+      givenAt: session.consent.givenAt,
+    },
   };
 }
 

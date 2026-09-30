@@ -9,6 +9,7 @@ import {
   resetDreamSession,
   useDreamSession,
 } from "@/features/dream-intake/session-store";
+import { hasValidConsent } from "@/features/dream-intake/consent";
 import { routes } from "@/lib/site";
 import {
   ClientAnalysisError,
@@ -31,8 +32,11 @@ export function InterpretationView() {
 
   const request = useMemo(
     () =>
-      session?.phase === "complete" && session.dream.trim()
-        ? toAnalysisRequest(session)
+      session?.phase === "complete" &&
+      session.dream.trim() &&
+      session.consent &&
+      hasValidConsent(session.consent)
+        ? toAnalysisRequest({ ...session, consent: session.consent })
         : null,
     [session],
   );
@@ -70,7 +74,15 @@ export function InterpretationView() {
       {!session ? (
         <div aria-busy="true" className="min-h-[60vh]" />
       ) : !request ? (
-        <NotReady inProgress={session.phase !== "story" || !!session.dream} />
+        <NotReady
+          reason={
+            session.phase === "complete"
+              ? "consent"
+              : session.phase !== "story" || session.dream
+                ? "progress"
+                : "start"
+          }
+        />
       ) : interpretation ? (
         <InterpretationResult
           interpretation={interpretation}
@@ -140,21 +152,36 @@ function ErrorState({
   );
 }
 
-function NotReady({ inProgress }: { inProgress: boolean }) {
+const NOT_READY = {
+  start: {
+    title: "Hier erscheint bald deine Traumdeutung.",
+    text: "Erzähl zuerst deinen Traum. Danach schauen wir gemeinsam genauer hin.",
+    action: "Traum erzählen",
+  },
+  progress: {
+    title: "Du bist fast so weit.",
+    text: "Beantworte noch die letzten Fragen – dann entsteht deine persönliche Deutung.",
+    action: "Abfrage fortsetzen",
+  },
+  consent: {
+    title: "Nur noch ein Schritt.",
+    text: "Bevor deine Deutung entstehen kann, bestätige bitte noch die Einwilligung zur Verarbeitung deines Traums.",
+    action: "Einwilligung bestätigen",
+  },
+} as const;
+
+function NotReady({ reason }: { reason: keyof typeof NOT_READY }) {
+  const content = NOT_READY[reason];
   return (
     <div className="flex min-h-[60vh] animate-step-in flex-col items-center justify-center text-center">
       <h1 className="font-serif text-3xl leading-tight font-light text-balance text-moon-50 sm:text-4xl">
-        {inProgress
-          ? "Du bist fast so weit."
-          : "Hier erscheint bald deine Traumdeutung."}
+        {content.title}
       </h1>
       <p className="mt-5 max-w-md leading-relaxed text-pretty text-moon-300">
-        {inProgress
-          ? "Beantworte noch die letzten Fragen – dann entsteht deine persönliche Deutung."
-          : "Erzähl zuerst deinen Traum. Danach schauen wir gemeinsam genauer hin."}
+        {content.text}
       </p>
       <ButtonLink href={routes.dream} className="mt-10">
-        {inProgress ? "Abfrage fortsetzen" : "Traum erzählen"}
+        {content.action}
       </ButtonLink>
     </div>
   );
