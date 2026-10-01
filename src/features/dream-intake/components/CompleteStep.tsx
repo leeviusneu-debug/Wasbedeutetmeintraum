@@ -13,6 +13,8 @@ type CompleteStepProps = {
   onRestart: () => void;
   consentGiven: boolean;
   onConsentChange: (checked: boolean) => void;
+  /** Einwilligung abfragen (in der Demo ohne Übermittlung aus). */
+  requireConsent?: boolean;
   /** Statt des Links zu /traum/deutung (z. B. in der Demo). */
   onInterpret?: () => void;
 };
@@ -23,8 +25,10 @@ export function CompleteStep({
   consentGiven,
   onConsentChange,
   onInterpret,
+  requireConsent = true,
 }: CompleteStepProps) {
   const consentId = useId();
+  const canInterpret = consentGiven || !requireConsent;
   const hintId = useId();
   const interpretLabel = (
     <>
@@ -56,34 +60,36 @@ export function CompleteStep({
         spiritueller Sicht.
       </p>
 
-      <div className="mt-10 flex w-full max-w-xl items-start gap-3 rounded-2xl bg-moon-50/[0.03] p-4 text-left ring-1 ring-moon-50/10 sm:p-5">
-        <span className="relative mt-0.5 flex h-5 w-5 shrink-0">
-          <input
-            id={consentId}
-            type="checkbox"
-            checked={consentGiven}
-            onChange={(event) => onConsentChange(event.target.checked)}
-            aria-describedby={consentGiven ? undefined : hintId}
-            className="peer h-5 w-5 cursor-pointer appearance-none rounded-md bg-night-950/60 ring-1 ring-moon-50/25 transition-colors checked:bg-glow-300/90 checked:ring-glow-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-glow-300"
-          />
-          <CheckIcon className="pointer-events-none absolute inset-0 m-auto h-3.5 w-3.5 text-night-950 opacity-0 peer-checked:opacity-100" />
-        </span>
-        <label
-          htmlFor={consentId}
-          className="cursor-pointer text-xs leading-relaxed text-pretty text-moon-300 sm:text-sm"
-        >
-          {PROCESSING_CONSENT.text} Mehr dazu in der{" "}
-          <Link
-            href={routes.privacy}
-            className="underline decoration-moon-400/40 underline-offset-2 hover:text-moon-100"
+      {requireConsent && (
+        <div className="mt-10 flex w-full max-w-xl items-start gap-3 rounded-2xl bg-moon-50/[0.03] p-4 text-left ring-1 ring-moon-50/10 sm:p-5">
+          <span className="relative mt-0.5 flex h-5 w-5 shrink-0">
+            <input
+              id={consentId}
+              type="checkbox"
+              checked={consentGiven}
+              onChange={(event) => onConsentChange(event.target.checked)}
+              aria-describedby={canInterpret ? undefined : hintId}
+              className="peer h-5 w-5 cursor-pointer appearance-none rounded-md bg-night-950/60 ring-1 ring-moon-50/25 transition-colors checked:bg-glow-300/90 checked:ring-glow-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-glow-300"
+            />
+            <CheckIcon className="pointer-events-none absolute inset-0 m-auto h-3.5 w-3.5 text-night-950 opacity-0 peer-checked:opacity-100" />
+          </span>
+          <label
+            htmlFor={consentId}
+            className="cursor-pointer text-xs leading-relaxed text-pretty text-moon-300 sm:text-sm"
           >
-            Datenschutzerklärung
-          </Link>
-          .
-        </label>
-      </div>
+            {PROCESSING_CONSENT.text} Mehr dazu in der{" "}
+            <Link
+              href={routes.privacy}
+              className="underline decoration-moon-400/40 underline-offset-2 hover:text-moon-100"
+            >
+              Datenschutzerklärung
+            </Link>
+            .
+          </label>
+        </div>
+      )}
 
-      {!consentGiven ? (
+      {!canInterpret ? (
         <Button disabled className="mt-8 w-full max-w-xs sm:w-auto">
           {interpretLabel}
         </Button>
@@ -102,7 +108,7 @@ export function CompleteStep({
           {interpretLabel}
         </ButtonLink>
       )}
-      {!consentGiven && (
+      {!canInterpret && (
         <p id={hintId} className="mt-3 text-xs text-moon-400">
           Bitte bestätige zuerst die Einwilligung.
         </p>

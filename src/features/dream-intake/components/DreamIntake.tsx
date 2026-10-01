@@ -45,6 +45,13 @@ export type DreamIntakeFlowProps = {
   onStoryFocus?: () => void;
   /** Wird beim Antippen eines Textfelds einer Frage aufgerufen (Demo). */
   onAnswerFocus?: (id: QuestionId) => void;
+  /** Überschrift des ersten Schritts (Demo). */
+  storyTitle?: string;
+  /**
+   * Hinweis zur Verarbeitung und Einwilligung anzeigen. Nur abschalten, wenn
+   * nichts übermittelt wird (Demo).
+   */
+  processesData?: boolean;
 };
 
 /** Der eigentliche Ablauf – unabhängig davon, wo die Sitzung gespeichert ist. */
@@ -54,6 +61,8 @@ export function DreamIntakeFlow({
   onInterpret,
   onStoryFocus,
   onAnswerFocus,
+  storyTitle,
+  processesData = true,
 }: DreamIntakeFlowProps) {
   const [leaving, setLeaving] = useState(false);
   const busy = useRef(false);
@@ -108,6 +117,8 @@ export function DreamIntakeFlow({
             value={session.dream}
             onChange={(dream) => update((s) => ({ ...s, dream }))}
             onFocus={onStoryFocus}
+            title={storyTitle}
+            showProcessingNotice={processesData}
             onSubmit={() =>
               transition((s) => {
                 const flow = buildQuestionFlow(s.dream);
@@ -142,6 +153,7 @@ export function DreamIntakeFlow({
             }
             onRestart={() => transition(createEmptySession)}
             consentGiven={hasValidConsent(session.consent)}
+            requireConsent={processesData}
             onConsentChange={(checked) =>
               update((s) => ({
                 ...s,
