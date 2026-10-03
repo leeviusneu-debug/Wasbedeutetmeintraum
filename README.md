@@ -26,14 +26,18 @@ Der Schlüssel wird nur serverseitig gelesen und nie an den Browser ausgeliefert
 
 ### Ablauf
 
-1. `/` – Startseite mit Einstieg und „Wie funktioniert das?“ (Platz für das
+1. `/` – Startseite: Einstieg, Leitidee, „Wie funktioniert das?“ (Platz für das
    Erklärvideo: `siteConfig.explainerVideo` in `src/lib/site.ts`).
-2. `/traum` – Traum erzählen und Fragen beantworten (lokal gespeichert).
-3. `/traum/deutung` – `POST /api/deutung` erzeugt serverseitig die Deutung
-   (`features/analysis/analyze.ts`). Sie ist als erste Orientierung aufgebaut
-   und endet mit einem Übergang (`bridge`) zur persönlichen Ebene.
-4. `/gespraech` – Platzhalter für das bezahlte persönliche Gespräch
-   (Dauer, Preis, Kalender, Zahlung folgen).
+2. `/traum` – Traum erzählen, Fragen beantworten, Einwilligung (lokal gespeichert).
+3. `/traum/deutung` – `POST /api/deutung` erzeugt serverseitig die
+   **vollständige** Deutung (`features/analysis/analyze.ts`). Danach folgt eine
+   ruhige Einladung zur persönlichen Traumdeutung.
+4. `/gespraech` – Buchungsseite der persönlichen Traumdeutung
+   (149 €, bis zu 60 Minuten; `features/booking/`). Calendly und Stripe sind
+   vorbereitet, aber noch nicht angebunden (`bookingConfig` in `src/lib/site.ts`).
+
+Das Angebot (Name, Dauer, Preis) wird zentral in
+`src/features/booking/offer.ts` gepflegt.
 
 ### Demo für die Videoaufnahme
 

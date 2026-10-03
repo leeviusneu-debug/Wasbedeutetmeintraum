@@ -52,11 +52,12 @@ function normalize(interpretation: DreamInterpretation): DreamInterpretation {
       title: o.title.trim().replace(/[.:]$/, ""),
       text: o.text.trim(),
     })),
+    thread: interpretation.thread.trim(),
     psychological: trimAll(interpretation.psychological),
     keyInsight: interpretation.keyInsight.trim(),
     symbolic: trimAll(interpretation.symbolic),
     mystical: trimAll(interpretation.mystical),
-    bridge: interpretation.bridge.trim(),
+    reflection: interpretation.reflection.trim(),
     careNote: interpretation.careNote.trim(),
   };
 }

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { AnalysisLoading, InterpretationResult } from "@/features/analysis";
-import { ConversationOffer } from "@/features/conversation/ConversationOffer";
+import { BookingPage } from "@/features/booking/components/BookingPage";
 import { DreamIntakeFlow } from "@/features/dream-intake/components/DreamIntake";
 import { buildQuestionFlow } from "@/features/dream-intake/questions";
 import { createEmptySession } from "@/features/dream-intake/session-store";
@@ -12,14 +12,9 @@ import type {
   DreamSession,
   QuestionId,
 } from "@/features/dream-intake/types";
-import {
-  DEMO_ANSWERS,
-  DEMO_DEEPENING,
-  DEMO_DREAM,
-  DEMO_INTERPRETATION,
-} from "./content";
+import { DEMO_ANSWERS, DEMO_DREAM, DEMO_INTERPRETATION } from "./content";
 
-type Stage = "intake" | "loading" | "result" | "conversation";
+type Stage = "intake" | "loading" | "result" | "booking";
 
 const LOADING_DURATION = 9000;
 /** Pause, bevor eine vorbereitete Antwort erscheint. */
@@ -184,7 +179,7 @@ export function DemoFlow() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage, session.phase, session.step]);
 
-  // Stufenwechsel: nach oben, Ladezeit, im Autoplay bis zur Gesprächsseite.
+  // Stufenwechsel: nach oben, Ladezeit, im Autoplay bis zur Buchungsseite.
   useEffect(() => {
     if (stage === "intake") return;
     window.scrollTo({ top: 0 });
@@ -201,15 +196,17 @@ export function DemoFlow() {
       let interval = 0;
       const start = window.setTimeout(() => {
         interval = window.setInterval(() => {
-          const cta = document.querySelector<HTMLElement>(
-            '[data-cta="deepening"]',
-          );
+          const cta = document.querySelector<HTMLElement>('[data-cta="offer"]');
           const target = cta
             ? cta.getBoundingClientRect().top - window.innerHeight * 0.6
             : 0;
-          if (!cta || target <= 0) {
+          const atBottom =
+            window.innerHeight + window.scrollY >=
+            document.documentElement.scrollHeight - 2;
+          // Ganze Pixel: Bruchteile lassen sich nicht scrollen.
+          if (!cta || target < 1 || atBottom) {
             window.clearInterval(interval);
-            later(() => setStage("conversation"), 2600);
+            later(() => setStage("booking"), 2600);
             return;
           }
           window.scrollBy(0, Math.min(2, target));
@@ -246,11 +243,7 @@ export function DemoFlow() {
       <div className="mx-auto w-full max-w-2xl px-5 pt-10 pb-16 sm:px-8 sm:pt-20 sm:pb-24">
         <InterpretationResult
           interpretation={DEMO_INTERPRETATION}
-          deepening={{
-            lead: DEMO_DEEPENING.lead,
-            cta: DEMO_DEEPENING.cta,
-            onClick: () => setStage("conversation"),
-          }}
+          onRequestOffer={() => setStage("booking")}
           actions={
             <div className="flex justify-center">
               <Button variant="ghost" onClick={restart}>
@@ -263,10 +256,10 @@ export function DemoFlow() {
     );
   }
 
-  if (stage === "conversation") {
+  if (stage === "booking") {
     return (
       <div className="animate-step-in">
-        <ConversationOffer onBack={() => setStage("result")} />
+        <BookingPage onBack={() => setStage("result")} />
       </div>
     );
   }

@@ -69,6 +69,12 @@ export const dreamInterpretationSchema = z.object({
     .min(2)
     .max(4)
     .describe("2–4 zentrale Beobachtungen zum gesamten Traum."),
+  thread: z
+    .string()
+    .min(1)
+    .describe(
+      "Der rote Faden: 2–4 Sätze zur zentralen Dynamik, die den ganzen Traum von Anfang bis Ende verbindet.",
+    ),
   psychological: paragraphs(
     "Eine mögliche psychologische Perspektive, 2–3 Absätze.",
     3,
@@ -80,18 +86,18 @@ export const dreamInterpretationSchema = z.object({
       "Der zentrale Gedanke: 1–2 Sätze, die Traum und Lebenssituation konkret und überraschend verbinden.",
     ),
   symbolic: paragraphs(
-    "Die symbolische Ebene mit mehreren möglichen Lesarten, 1–2 Absätze.",
-    2,
+    "Die symbolische Ebene mit mehreren möglichen Lesarten, 2–3 Absätze.",
+    3,
   ),
   mystical: paragraphs(
-    "Eine vorsichtige traditionelle/spirituelle Perspektive, 1 Absatz.",
-    1,
+    "Eine vorsichtige traditionelle/spirituelle Perspektive, 1–2 Absätze.",
+    2,
   ),
-  bridge: z
+  reflection: z
     .string()
     .min(1)
     .describe(
-      "2–3 Sätze: Eine sich abzeichnende Verbindung zur Lebenssituation benennen und behutsam zeigen, was man persönlich wissen müsste, um sie wirklich einzuordnen.",
+      "Ein persönlicher Reflexionsimpuls: 1–2 Sätze Einladung und genau eine offene Frage, die sich aus einem konkreten Detail ergibt.",
     ),
   careNote: z
     .string()

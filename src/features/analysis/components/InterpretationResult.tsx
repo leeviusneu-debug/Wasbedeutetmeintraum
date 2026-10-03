@@ -1,22 +1,12 @@
 import type { CSSProperties, ReactNode } from "react";
-import { Button } from "@/components/ui/Button";
-import { ButtonLink } from "@/components/ui/ButtonLink";
-import { ArrowRightIcon } from "@/components/ui/icons";
-import { routes } from "@/lib/site";
+import { OfferInvitation } from "@/features/booking/components/OfferInvitation";
 import type { DreamInterpretation } from "../schema";
 
 type InterpretationResultProps = {
   interpretation: DreamInterpretation;
   actions?: ReactNode;
-  /** Überleitung und Button zur persönlichen Vertiefung anpassen (z. B. Demo). */
-  deepening?: DeepeningOptions;
-};
-
-type DeepeningOptions = {
-  lead?: string;
-  cta?: string;
-  /** Statt des Links zu /gespraech. */
-  onClick?: () => void;
+  /** Statt des Links zur Buchungsseite (z. B. in der Demo). */
+  onRequestOffer?: () => void;
 };
 
 /** Gestaffeltes, ruhiges Einblenden der Abschnitte. */
@@ -30,16 +20,17 @@ function reveal(order: number, className = "") {
 export function InterpretationResult({
   interpretation,
   actions,
-  deepening,
+  onRequestOffer,
 }: InterpretationResultProps) {
   const {
     summary,
     observations,
+    thread,
     psychological,
     keyInsight,
     symbolic,
     mystical,
-    bridge,
+    reflection,
     careNote,
   } = interpretation;
 
@@ -88,11 +79,17 @@ export function InterpretationResult({
         </ul>
       </Section>
 
-      <Section title="Eine mögliche psychologische Perspektive" order={2}>
+      <Section title="Der rote Faden" order={2}>
+        <p className="border-l border-glow-300/40 pl-5 font-serif text-xl leading-relaxed text-pretty text-moon-100 sm:text-[1.35rem]">
+          {thread}
+        </p>
+      </Section>
+
+      <Section title="Eine mögliche psychologische Perspektive" order={3}>
         <Paragraphs items={psychological} />
       </Section>
 
-      <figure {...reveal(3, "mt-14 text-center")}>
+      <figure {...reveal(4, "mt-14 text-center")}>
         <Divider />
         <figcaption className="mt-8 text-[0.7rem] font-medium tracking-[0.3em] text-glow-300/80 uppercase">
           Ein Gedanke, der bleibt
@@ -103,13 +100,13 @@ export function InterpretationResult({
         <Divider className="mt-8" />
       </figure>
 
-      <Section title="Die symbolische Ebene" order={4}>
+      <Section title="Die symbolische Ebene" order={5}>
         <Paragraphs items={symbolic} />
       </Section>
 
       <Section
         title="Wenn du auch die mystische Seite betrachten möchtest"
-        order={5}
+        order={6}
       >
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-dusk-500/15 via-night-900/60 to-night-900/40 p-6 ring-1 ring-dusk-400/20 sm:p-8">
           <span
@@ -122,19 +119,20 @@ export function InterpretationResult({
         </div>
       </Section>
 
-      <section {...reveal(6, "mt-16")}>
-        <h2 className="sr-only">Die persönliche Ebene</h2>
-        <p className="border-l border-glow-300/40 pl-5 font-serif text-xl leading-relaxed text-pretty text-moon-100 sm:text-[1.35rem]">
-          {bridge}
-        </p>
-        <PersonalDeepening {...deepening} />
+      <section {...reveal(7, "mt-16")}>
+        <div className="rounded-3xl bg-night-900/60 px-6 py-10 text-center ring-1 ring-moon-50/10 backdrop-blur-sm sm:px-10">
+          <h2 className="font-serif text-xl text-moon-300 italic">
+            Ein Impuls für dich
+          </h2>
+          <p className="mx-auto mt-5 max-w-xl font-serif text-2xl leading-snug font-light text-balance text-glow-300 sm:text-[1.7rem]">
+            {reflection}
+          </p>
+        </div>
       </section>
-
-      {actions && <div {...reveal(7, "mt-16")}>{actions}</div>}
 
       <p
         {...reveal(
-          7,
+          8,
           "mx-auto mt-10 max-w-md text-center text-xs leading-relaxed text-pretty text-moon-400",
         )}
       >
@@ -142,62 +140,13 @@ export function InterpretationResult({
         Tatsachenbehauptung und kein Ersatz für psychologische oder medizinische
         Beratung.
       </p>
-    </article>
-  );
-}
 
-/** Der ruhige Übergang zur persönlichen Vertiefung. */
-function PersonalDeepening({
-  lead = "Genau hier beginnt die persönliche Ebene.",
-  cta = "Traum persönlich vertiefen",
-  onClick,
-}: DeepeningOptions) {
-  const label = (
-    <>
-      {cta}
-      <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-    </>
-  );
-  const buttonClass = "mt-8 w-full max-w-xs sm:w-auto";
-
-  return (
-    <div className="relative mt-14 overflow-hidden rounded-3xl bg-gradient-to-b from-night-800/80 to-night-900/80 px-5 py-10 text-center ring-1 ring-glow-300/20 backdrop-blur-sm sm:px-10 sm:py-12">
-      <span
-        aria-hidden="true"
-        className="absolute -top-24 left-1/2 h-48 w-72 -translate-x-1/2 rounded-full bg-glow-300/10 blur-3xl"
-      />
-      <div className="relative">
-        <p
-          className={`mx-auto max-w-lg font-serif leading-snug font-light text-balance text-glow-300 ${
-            lead.length > 60 ? "text-xl sm:text-2xl" : "text-2xl sm:text-3xl"
-          }`}
-        >
-          {lead}
-        </p>
-        {onClick ? (
-          <Button
-            onClick={onClick}
-            className={buttonClass}
-            data-cta="deepening"
-          >
-            {label}
-          </Button>
-        ) : (
-          <ButtonLink
-            href={routes.conversation}
-            className={buttonClass}
-            data-cta="deepening"
-          >
-            {label}
-          </ButtonLink>
-        )}
-        <p className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-pretty text-moon-300">
-          Deine Deutung macht mögliche Zusammenhänge und Bedeutungen sichtbar.
-          Was davon zu deinem Leben passt, zeigt sich oft erst im persönlichen
-          Gespräch.
-        </p>
+      <div {...reveal(9, "mt-24")}>
+        <OfferInvitation onRequest={onRequestOffer} />
       </div>
-    </div>
+
+      {actions && <div {...reveal(10, "mt-16")}>{actions}</div>}
+    </article>
   );
 }
 

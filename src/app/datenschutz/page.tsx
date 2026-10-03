@@ -217,13 +217,15 @@ export default function PrivacyPage() {
       </section>
 
       <section>
-        <h2>7. Persönliches Gespräch</h2>
+        <h2>7. Persönliche Traumdeutung (Buchung)</h2>
         <p>
-          Die Buchung persönlicher Gespräche ist derzeit noch nicht möglich; auf
-          der Seite{" "}
-          <Link href={routes.conversation}>Persönliches Gespräch</Link> werden
-          keine Daten erhoben. Sobald Terminbuchung und Zahlung verfügbar sind,
-          ergänzen wir diese Erklärung.
+          Die Buchung der kostenpflichtigen persönlichen Traumdeutung ist
+          derzeit noch nicht freigeschaltet; auf der Seite{" "}
+          <Link href={routes.conversation}>Persönliche Traumdeutung</Link>{" "}
+          werden keine Daten erhoben. Sobald Terminbuchung und Zahlung verfügbar
+          sind (geplant über einen Terminbuchungs- und einen
+          Zahlungsdienstleister), ergänzen wir diese Erklärung um die
+          entsprechenden Angaben.
         </p>
       </section>
 

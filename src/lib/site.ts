@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: "Was bedeutet mein Traum?",
   description:
-    "Erzähle uns deinen Traum – wir schauen gemeinsam genauer hin. Traumdeutung aus psychologischer, symbolischer und behutsam spiritueller Perspektive.",
+    "Träume können Schlüssel zu unserer Seele sein. Erzähle deinen Traum und erhalte eine persönliche Deutung aus psychologischer, symbolischer und behutsam spiritueller Perspektive.",
   locale: "de_DE",
   /**
    * Erklärvideo auf der Startseite („Wie funktioniert das?“).
@@ -24,6 +24,18 @@ export const legalConfig = {
   hostingProvider: "",
   /** Stand der Datenschutzerklärung. */
   privacyUpdated: "September 2026",
+};
+
+/**
+ * Buchung der persönlichen Traumdeutung.
+ * Solange keine Calendly-URL eingetragen ist, zeigt die Buchungsseite einen
+ * Platzhalter. Die WhatsApp-Nummer erscheint nur nach einer Buchung.
+ */
+export const bookingConfig = {
+  /** z. B. "https://calendly.com/dein-name/persoenliche-traumdeutung" */
+  calendlyUrl: null as string | null,
+  /** Internationales Format ohne +, z. B. "4917612345678" */
+  whatsappNumber: null as string | null,
 };
 
 export const routes = {

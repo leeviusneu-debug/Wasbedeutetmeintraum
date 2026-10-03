@@ -1,5 +1,6 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ArrowRightIcon } from "@/components/ui/icons";
+import { PERSONAL_READING } from "@/features/booking/offer";
 import { routes } from "@/lib/site";
 import { ExplainerVideo } from "./ExplainerVideo";
 
@@ -13,12 +14,12 @@ const STEPS = [
     text: "Zu Gefühlen, Bildern und dem, was dich gerade bewegt.",
   },
   {
-    title: "Deine Deutung",
-    text: "Psychologische, symbolische und traditionelle Deutungsansätze werden miteinander verbunden.",
+    title: "Deine vollständige Deutung",
+    text: "Psychologische, symbolische und traditionelle Sichtweisen – kostenlos und ganz auf deinen Traum bezogen.",
   },
   {
-    title: "Persönlich vertiefen",
-    text: "Was davon zu deinem Leben passt, zeigt sich oft erst im persönlichen Gespräch.",
+    title: "Wenn du möchtest: persönlich",
+    text: `Eine ${PERSONAL_READING.name.toLowerCase()} im Gespräch – ${PERSONAL_READING.durationLabel.toLowerCase()}, ${PERSONAL_READING.priceLabel}.`,
   },
 ];
 
@@ -39,10 +40,11 @@ export function HowItWorks() {
           Aus deinen Antworten entsteht eine persönliche Deutung.
         </h2>
         <p className="mt-5 text-lg leading-relaxed text-pretty text-moon-300">
-          Manche Träume lassen uns nicht los. Dein Traum wird aus verschiedenen
-          Perspektiven betrachtet und gibt dir eine erste Orientierung – was
-          davon wirklich zu deinem Leben passt, kannst du anschließend
-          persönlich vertiefen.
+          Ein Traum kann mehrere Ebenen haben – Gefühle, Erinnerungen, Bilder,
+          die für dich etwas ganz Eigenes bedeuten. Deine Deutung hilft dir,
+          diese Ebenen in Ruhe zu betrachten. Wenn du tiefer gehen möchtest,
+          kannst du deinen Traum anschließend persönlich mit deiner
+          Lebenssituation verbinden.
         </p>
       </div>
 

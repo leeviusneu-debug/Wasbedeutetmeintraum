@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 import { PageShell } from "@/components/layout/PageShell";
-import { ConversationOffer } from "@/features/conversation/ConversationOffer";
+import { BookingPage } from "@/features/booking/components/BookingPage";
+import { PERSONAL_READING } from "@/features/booking/offer";
 
 export const metadata: Metadata = {
-  title: "Persönliches Gespräch",
-  description:
-    "Dein Traum ist persönlich. Deine Deutung auch. Verbinde deinen Traum im persönlichen Gespräch mit dem, was dich gerade wirklich beschäftigt.",
+  title: PERSONAL_READING.name,
+  description: `${PERSONAL_READING.name} im persönlichen Gespräch – ${PERSONAL_READING.durationLabel.toLowerCase()}, ${PERSONAL_READING.priceLabel}. Dein Traum, verbunden mit dem, was dich gerade wirklich beschäftigt.`,
 };
 
-export default function ConversationPage() {
+export default function BookingRoute() {
   return (
     <PageShell>
-      <ConversationOffer />
+      <BookingPage />
     </PageShell>
   );
 }
