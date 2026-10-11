@@ -10,7 +10,7 @@ import type { Answer, QuestionId } from "@/features/dream-intake/types";
  *   Frage wird die vorbereitete Antwort automatisch ausgewählt bzw. getippt,
  *   danach nur noch „Weiter“ klicken.
  * - Automatisch: /demo?autoplay – der komplette Ablauf läuft von selbst bis
- *   zur Buchungsseite.
+ *   zum Ende der Deutung.
  */
 export const DEMO_DREAM =
   "Ich träume, dass ich durch ein altes Haus gehe. Ich kenne das Haus nicht, aber irgendwie fühlt es sich vertraut an. Im oberen Stock höre ich jemanden meinen Namen rufen. Ich bekomme Angst und suche nach einem Ausgang. Als ich eine Tür öffne, stehe ich plötzlich draußen an einem See. Dort ist es völlig still. Dann wache ich auf.";

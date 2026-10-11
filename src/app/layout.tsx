@@ -18,17 +18,24 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
-    default: siteConfig.name,
-    template: `%s · ${siteConfig.name}`,
+    default: siteConfig.homeTitle,
+    template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  applicationName: siteConfig.name,
   openGraph: {
-    title: siteConfig.name,
+    siteName: siteConfig.name,
+    title: siteConfig.homeTitle,
     description: siteConfig.description,
     locale: siteConfig.locale,
     type: "website",
+    url: "/",
   },
+  twitter: { card: "summary_large_image" },
+  robots: { index: true, follow: true },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {

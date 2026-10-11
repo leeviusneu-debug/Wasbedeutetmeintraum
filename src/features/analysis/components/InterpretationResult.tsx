@@ -1,12 +1,9 @@
 import type { CSSProperties, ReactNode } from "react";
-import { OfferInvitation } from "@/features/booking/components/OfferInvitation";
 import type { DreamInterpretation } from "../schema";
 
 type InterpretationResultProps = {
   interpretation: DreamInterpretation;
   actions?: ReactNode;
-  /** Statt des Links zur Buchungsseite (z. B. in der Demo). */
-  onRequestOffer?: () => void;
 };
 
 /** Gestaffeltes, ruhiges Einblenden der Abschnitte. */
@@ -20,7 +17,6 @@ function reveal(order: number, className = "") {
 export function InterpretationResult({
   interpretation,
   actions,
-  onRequestOffer,
 }: InterpretationResultProps) {
   const {
     summary,
@@ -119,7 +115,7 @@ export function InterpretationResult({
         </div>
       </Section>
 
-      <section {...reveal(7, "mt-16")}>
+      <section {...reveal(7, "mt-16")} data-section="reflection">
         <div className="rounded-3xl bg-night-900/60 px-6 py-10 text-center ring-1 ring-moon-50/10 backdrop-blur-sm sm:px-10">
           <h2 className="font-serif text-xl text-moon-300 italic">
             Ein Impuls für dich
@@ -141,11 +137,7 @@ export function InterpretationResult({
         Beratung.
       </p>
 
-      <div {...reveal(9, "mt-24")}>
-        <OfferInvitation onRequest={onRequestOffer} />
-      </div>
-
-      {actions && <div {...reveal(10, "mt-16")}>{actions}</div>}
+      {actions && <div {...reveal(9, "mt-14")}>{actions}</div>}
     </article>
   );
 }

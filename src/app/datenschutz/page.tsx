@@ -5,6 +5,8 @@ import { legalConfig, routes, siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Datenschutz",
+  // Rechtstexte nicht in Suchergebnissen anzeigen, Links aber folgen.
+  robots: { index: false, follow: true },
   description: `Datenschutzerklärung von „${siteConfig.name}“.`,
 };
 
@@ -217,20 +219,7 @@ export default function PrivacyPage() {
       </section>
 
       <section>
-        <h2>7. Persönliche Traumdeutung (Buchung)</h2>
-        <p>
-          Die Buchung der kostenpflichtigen persönlichen Traumdeutung ist
-          derzeit noch nicht freigeschaltet; auf der Seite{" "}
-          <Link href={routes.conversation}>Persönliche Traumdeutung</Link>{" "}
-          werden keine Daten erhoben. Sobald Terminbuchung und Zahlung verfügbar
-          sind (geplant über einen Terminbuchungs- und einen
-          Zahlungsdienstleister), ergänzen wir diese Erklärung um die
-          entsprechenden Angaben.
-        </p>
-      </section>
-
-      <section>
-        <h2>8. Verschlüsselung</h2>
+        <h2>7. Verschlüsselung</h2>
         <p>
           Die Übertragung zwischen deinem Browser und unserem Server sowie
           zwischen unserem Server und OpenAI erfolgt verschlüsselt (TLS).
@@ -238,7 +227,7 @@ export default function PrivacyPage() {
       </section>
 
       <section>
-        <h2>9. Deine Rechte</h2>
+        <h2>8. Deine Rechte</h2>
         <p>Du hast jederzeit das Recht auf</p>
         <ul>
           <li>Auskunft über deine verarbeiteten Daten (Art. 15 DSGVO),</li>

@@ -1,6 +1,5 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ArrowRightIcon } from "@/components/ui/icons";
-import { PERSONAL_READING } from "@/features/booking/offer";
 import { routes } from "@/lib/site";
 import { ExplainerVideo } from "./ExplainerVideo";
 
@@ -16,10 +15,6 @@ const STEPS = [
   {
     title: "Deine vollständige Deutung",
     text: "Psychologische, symbolische und traditionelle Sichtweisen – kostenlos und ganz auf deinen Traum bezogen.",
-  },
-  {
-    title: "Wenn du möchtest: persönlich",
-    text: `Eine ${PERSONAL_READING.name.toLowerCase()} im Gespräch – ${PERSONAL_READING.durationLabel.toLowerCase()}, ${PERSONAL_READING.priceLabel}.`,
   },
 ];
 
@@ -40,11 +35,10 @@ export function HowItWorks() {
           Aus deinen Antworten entsteht eine persönliche Deutung.
         </h2>
         <p className="mt-5 text-lg leading-relaxed text-pretty text-moon-300">
-          Ein Traum kann mehrere Ebenen haben – Gefühle, Erinnerungen, Bilder,
-          die für dich etwas ganz Eigenes bedeuten. Deine Deutung hilft dir,
-          diese Ebenen in Ruhe zu betrachten. Wenn du tiefer gehen möchtest,
-          kannst du deinen Traum anschließend persönlich mit deiner
-          Lebenssituation verbinden.
+          Ein Traum kann mehrere Ebenen haben – Gefühle, Erinnerungen und
+          Bilder, die für dich etwas ganz Eigenes bedeuten. Deine Deutung hilft
+          dir, diese Ebenen in Ruhe zu betrachten: kostenlos, anonym und in
+          wenigen Minuten.
         </p>
       </div>
 
@@ -52,7 +46,7 @@ export function HowItWorks() {
         <ExplainerVideo />
       </div>
 
-      <ol className="mt-12 grid gap-px overflow-hidden rounded-2xl bg-moon-50/10 ring-1 ring-moon-50/10 sm:grid-cols-2 lg:grid-cols-4">
+      <ol className="mt-12 grid gap-px overflow-hidden rounded-2xl bg-moon-50/10 ring-1 ring-moon-50/10 sm:grid-cols-3">
         {STEPS.map((step, i) => (
           <li
             key={step.title}

@@ -32,12 +32,18 @@ Der Schlüssel wird nur serverseitig gelesen und nie an den Browser ausgeliefert
 3. `/traum/deutung` – `POST /api/deutung` erzeugt serverseitig die
    **vollständige** Deutung (`features/analysis/analyze.ts`). Danach folgt eine
    ruhige Einladung zur persönlichen Traumdeutung.
-4. `/gespraech` – Buchungsseite der persönlichen Traumdeutung
-   (149 €, bis zu 60 Minuten; `features/booking/`). Calendly und Stripe sind
-   vorbereitet, aber noch nicht angebunden (`bookingConfig` in `src/lib/site.ts`).
+4. `/traumdeutung` – Traumsymbol-Lexikon mit Einzelseiten
+   (`/traumdeutung/[symbol]`, Inhalte in `src/features/symbols/`) – die
+   wichtigste Quelle für Suchmaschinen-Traffic.
 
-Das Angebot (Name, Dauer, Preis) wird zentral in
-`src/features/booking/offer.ts` gepflegt.
+### SEO
+
+- Domain/URL: `siteConfig.url` in `src/lib/site.ts` (für Canonical, Sitemap,
+  Open Graph).
+- `src/app/sitemap.ts`, `src/app/robots.ts`, `src/app/opengraph-image.tsx`.
+- Strukturierte Daten (JSON-LD): `src/lib/seo.ts`.
+- Neue Traumsymbole: Eintrag in `src/features/symbols/data.ts` ergänzen –
+  Seite, Sitemap und Verlinkung entstehen automatisch.
 
 ### Demo für die Videoaufnahme
 

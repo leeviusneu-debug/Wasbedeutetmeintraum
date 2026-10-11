@@ -14,6 +14,10 @@ import { QuestionStep } from "./QuestionStep";
 import { StoryStep } from "./StoryStep";
 
 const EMPTY_ANSWER: Answer = { selected: [], text: "" };
+const INITIAL_SESSION: DreamSession = {
+  ...createEmptySession(),
+  updatedAt: "1970-01-01T00:00:00.000Z",
+};
 const LEAVE_DURATION = 220;
 
 function advance(session: DreamSession): DreamSession {
@@ -30,10 +34,14 @@ type SessionUpdater = (
 /** Traumabfrage mit lokal gespeicherter Sitzung (echter Ablauf unter /traum). */
 export function DreamIntake() {
   const session = useDreamSession();
-  if (!session) {
-    return <div aria-busy="true" className="min-h-[60vh]" />;
-  }
-  return <DreamIntakeFlow session={session} update={updateDreamSession} />;
+  // Vor dem Laden des Browser-Speichers (Server-Rendering) den Einstieg zeigen,
+  // damit die Seite auch ohne JavaScript Inhalt hat (wichtig für Suchmaschinen).
+  return (
+    <DreamIntakeFlow
+      session={session ?? INITIAL_SESSION}
+      update={updateDreamSession}
+    />
+  );
 }
 
 export type DreamIntakeFlowProps = {

@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { AnalysisLoading, InterpretationResult } from "@/features/analysis";
-import { BookingPage } from "@/features/booking/components/BookingPage";
 import { DreamIntakeFlow } from "@/features/dream-intake/components/DreamIntake";
 import { buildQuestionFlow } from "@/features/dream-intake/questions";
 import { createEmptySession } from "@/features/dream-intake/session-store";
@@ -14,7 +13,7 @@ import type {
 } from "@/features/dream-intake/types";
 import { DEMO_ANSWERS, DEMO_DREAM, DEMO_INTERPRETATION } from "./content";
 
-type Stage = "intake" | "loading" | "result" | "booking";
+type Stage = "intake" | "loading" | "result";
 
 const LOADING_DURATION = 9000;
 /** Pause, bevor eine vorbereitete Antwort erscheint. */
@@ -179,7 +178,7 @@ export function DemoFlow() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage, session.phase, session.step]);
 
-  // Stufenwechsel: nach oben, Ladezeit, im Autoplay bis zur Buchungsseite.
+  // Stufenwechsel: nach oben, Ladezeit, im Autoplay langsam durch die Deutung.
   useEffect(() => {
     if (stage === "intake") return;
     window.scrollTo({ top: 0 });
@@ -196,17 +195,19 @@ export function DemoFlow() {
       let interval = 0;
       const start = window.setTimeout(() => {
         interval = window.setInterval(() => {
-          const cta = document.querySelector<HTMLElement>('[data-cta="offer"]');
-          const target = cta
-            ? cta.getBoundingClientRect().top - window.innerHeight * 0.6
+          // Langsam bis zum Ende der Deutung (Impuls-Abschnitt) scrollen.
+          const end = document.querySelector<HTMLElement>(
+            '[data-section="reflection"]',
+          );
+          const target = end
+            ? end.getBoundingClientRect().bottom - window.innerHeight * 0.85
             : 0;
           const atBottom =
             window.innerHeight + window.scrollY >=
             document.documentElement.scrollHeight - 2;
           // Ganze Pixel: Bruchteile lassen sich nicht scrollen.
-          if (!cta || target < 1 || atBottom) {
+          if (!end || target < 1 || atBottom) {
             window.clearInterval(interval);
-            later(() => setStage("booking"), 2600);
             return;
           }
           window.scrollBy(0, Math.min(2, target));
@@ -243,7 +244,6 @@ export function DemoFlow() {
       <div className="mx-auto w-full max-w-2xl px-5 pt-10 pb-16 sm:px-8 sm:pt-20 sm:pb-24">
         <InterpretationResult
           interpretation={DEMO_INTERPRETATION}
-          onRequestOffer={() => setStage("booking")}
           actions={
             <div className="flex justify-center">
               <Button variant="ghost" onClick={restart}>
@@ -252,14 +252,6 @@ export function DemoFlow() {
             </div>
           }
         />
-      </div>
-    );
-  }
-
-  if (stage === "booking") {
-    return (
-      <div className="animate-step-in">
-        <BookingPage onBack={() => setStage("result")} />
       </div>
     );
   }

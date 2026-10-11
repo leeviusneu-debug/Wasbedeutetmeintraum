@@ -1,7 +1,11 @@
 export const siteConfig = {
   name: "Was bedeutet mein Traum?",
+  /** Öffentliche Adresse – Grundlage für Canonical-URLs, Sitemap und Open Graph. */
+  url: "https://wasbedeutetmeintraum.de",
+  /** Titel der Startseite in Suchergebnissen. */
+  homeTitle: "Was bedeutet mein Traum? Kostenlose Traumdeutung online",
   description:
-    "Träume können Schlüssel zu unserer Seele sein. Erzähle deinen Traum und erhalte eine persönliche Deutung aus psychologischer, symbolischer und behutsam spiritueller Perspektive.",
+    "Kostenlose Traumdeutung online: Erzähle deinen Traum, beantworte ein paar Fragen und erhalte eine persönliche Deutung – anonym und ohne Anmeldung.",
   locale: "de_DE",
   /**
    * Erklärvideo auf der Startseite („Wie funktioniert das?“).
@@ -26,23 +30,11 @@ export const legalConfig = {
   privacyUpdated: "September 2026",
 };
 
-/**
- * Buchung der persönlichen Traumdeutung.
- * Solange keine Calendly-URL eingetragen ist, zeigt die Buchungsseite einen
- * Platzhalter. Die WhatsApp-Nummer erscheint nur nach einer Buchung.
- */
-export const bookingConfig = {
-  /** z. B. "https://calendly.com/dein-name/persoenliche-traumdeutung" */
-  calendlyUrl: null as string | null,
-  /** Internationales Format ohne +, z. B. "4917612345678" */
-  whatsappNumber: null as string | null,
-};
-
 export const routes = {
   home: "/",
   dream: "/traum",
   interpretation: "/traum/deutung",
-  conversation: "/gespraech",
+  symbols: "/traumdeutung",
   demo: "/demo",
   imprint: "/impressum",
   privacy: "/datenschutz",

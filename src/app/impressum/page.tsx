@@ -3,6 +3,8 @@ import { SimplePage } from "@/components/layout/SimplePage";
 
 export const metadata: Metadata = {
   title: "Impressum",
+  // Rechtstexte nicht in Suchergebnissen anzeigen, Links aber folgen.
+  robots: { index: false, follow: true },
 };
 
 // TODO: Pflichtangaben nach § 5 DDG ergänzen.
